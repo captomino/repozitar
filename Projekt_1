@@ -1,0 +1,256 @@
+"""
+projekt_1.py: první projekt do Engeto Online Python Akademie
+
+author: Tomáš Čáp
+email: tomas.cap@centrum.cz
+"""
+# ------------------------------------------------------------
+
+# TEXTY PRO ANALYZU:
+ 
+TEXTS = ['''
+Situated about 10 miles west of Kemmerer,
+Fossil Butte is a ruggedly impressive
+topographic feature that rises sharply
+some 1000 feet above Twin Creek Valley
+to an elevation of more than 7500 feet
+above sea level. The butte is located just
+north of US 30N and the Union Pacific Railroad,
+which traverse the valley. ''',
+'''At the base of Fossil Butte are the bright
+red, purple, yellow and gray beds of the Wasatch
+Formation. Eroded portions of these horizontal
+beds slope gradually upward from the valley floor
+and steepen abruptly. Overlying them and extending
+to the top of the butte are the much steeper
+buff-to-white beds of the Green River Formation,
+which are about 300 feet thick.''',
+'''The monument contains 8198 acres and protects
+a portion of the largest deposit of freshwater fish
+fossils in the world. The richest fossil fish deposits
+are found in multiple limestone layers, which lie some
+100 feet below the top of the butte. The fossils
+represent several varieties of perch, as well as
+other freshwater genera and herring similar to those
+in modern oceans. Other fish such as paddlefish,
+garpike and stingray are also present.'''
+]
+
+# ------------------------------------------------------------
+
+# KROK 1 - Definuji podle zadani databazi uzivatelu,
+# vstupni promenne a oddelovac:
+
+reg_users = dict(
+    bob = "123",
+    ann = "pass123",
+    mike = "password123",
+    liz = "pass123"
+)
+
+user_name = input("username:")
+user_password = input("password:")
+
+line = "-" * 40
+
+# ------------------------------------------------------------
+
+# KROK 2 - Po zadani vstupnich promennych (user_name, user_pasword)
+# overim, zda je uzivatel registrovany v databazi (reg_users).
+# Neni-li, oznamim mu to a ukoncim program, je-li, privitam ho.
+
+if not user_name in reg_users: 
+    print("Unregistered user, terminating the program...")
+    quit()
+elif not user_password == reg_users.get(user_name):
+    print("Your password is wrong, terminating the program...")
+    quit()
+else:
+    print(line,
+     "Welcome to the app, " + user_name.capitalize() + "!",
+     "We have 3 texts to be analysed.",
+     line,
+     sep="\n")
+
+# ------------------------------------------------------------
+
+# KROK 3 - Definuji povolene hodnoty pro vyber textu:
+    # Zadany znak musi byt cislo (overim dale metodou "isdigit").
+    # Zadane cislo musi byt 1, 2 nebo 3 (-> allowed_values).
+
+allowed_values = (1, 2, 3)
+
+# ------------------------------------------------------------
+
+# KROK 4 - Vyzvu uzivatele k zadani hodnoty 1, 2 nebo 3.
+# Overim, zda je zadano spravne (viz krok 3). Pokud neni,
+# oznamim uzivateli a ukoncim program. Pokud je, provedu
+# analyzu vybraneho textu (viz Krok 5).
+
+chosen_text = input("Enter a number btw. 1 and 3 to select: ")
+if not chosen_text.isdigit():
+    print("The value must be number, terminating the program...")
+    quit()
+elif not int(chosen_text) in allowed_values:
+    print("Incorrect input, terminating the program...")
+    quit()
+else:
+    text_to_analysis = (TEXTS[int(chosen_text) - 1])
+
+print(line)
+
+# ------------------------------------------------------------
+
+# KROK 5 - Provedu analyzu textu dle definovanych pozadavku.
+
+# 5.1 - Priprava textu (odstraněni interpunkce, oddeleni slov):
+
+clean_words = []
+
+for word in text_to_analysis.split():
+    clean_word = word.strip(".,;:?!/()[]{}")
+    clean_words.append(clean_word)
+"""print(clean_words)""" # kontrola
+
+# 5.2 - Celkový pocet slov:
+
+words_total = len(clean_words)
+print("There are", words_total, "words in the selected text.")
+
+# 5.3 - Pocet slov s velkym pocatecnim pismenem:
+
+titlecase_list = []
+
+for clean_word in clean_words:
+    if not clean_word.isnumeric() and clean_word[0].isupper():
+        titlecase_list.append(clean_word)
+
+words_titlecase = len(titlecase_list)
+
+if words_titlecase == 1:
+    print("There is", words_titlecase, "uppercase word.")
+else:
+    print("There are", words_titlecase, "uppercase words.")
+
+"""print(titlecase_list)""" # kontrola
+
+# 5.4 - Pocet slov psaných velkymi pismeny:
+
+uppercase_list = []
+
+for clean_word in clean_words:
+    if clean_word.isupper() and clean_word.isalpha():
+        uppercase_list.append(clean_word)
+
+words_uppercase = len(uppercase_list)
+
+if words_uppercase == 1:
+    print("There is", words_uppercase, "uppercase word.")
+else:
+    print("There are", words_uppercase, "uppercase words.")
+
+"""print(uppercase_list)""" # kontrola
+
+# 5.5 - Pocet slov psaných malymi pismeny:
+
+lowercase_list = []
+
+for clean_word in clean_words:
+    if clean_word.islower() and clean_word.isalpha():
+        lowercase_list.append(clean_word)
+
+words_lowercase = len(lowercase_list)
+
+if words_lowercase == 1:
+    print("There is", words_lowercase, "lowercase word.")
+else:
+    print("There are", words_lowercase, "lowercase words.")
+
+"""print(lowercase_list)""" # kontrola
+
+# 5.6 - Pocet cisel v analyzovanem textu:
+
+numbers_list = []
+
+for clean_word in clean_words:
+    if clean_word.isnumeric():
+        numbers_list.append(clean_word)
+
+words_numeric = len(numbers_list)
+
+if words_numeric == 1:
+    print("There is", words_numeric, "numeric string.")
+else:
+    print("There are", words_numeric, "numeric strings.")
+
+"""print(numbers_list)""" # kontrola
+
+# 5.7 - Soucet cisel v analyzovanem textu:
+
+numbers_list_int = []
+
+for number in numbers_list:
+    numbers_list_int.append(int(number))
+    
+sum_of_numbers = sum(numbers_list_int)
+print("The sum of all numbers:", sum_of_numbers)
+
+# ------------------------------------------------------------
+
+# KROK 6 - Vytvorim statistiku cetnosti delek slov dle zadani.
+
+# 6.1 - Zahlavi tabulky
+
+print(line,
+      "LEN |".rjust(6)
+      + "OCCURENCES".center(15)
+      + "| NR".ljust(40),
+      line,
+      sep="\n"
+)
+
+# 6.2 - Pro kazde slovo v seznamu clean_words (viz 5.1)
+# spocitam pomoci funkce "len" pocet hlasek 
+# a vlozim do prazdneho seznamu clean_words2:
+
+clean_words2 = []
+
+for clean_word in clean_words:
+    clean_words2.append(len(clean_word))
+
+"""print(clean_words2)""" # kontrola
+
+# 6.3 - Urcim rozsah hodnot, pro ktere budu
+# zjistovat cetnosti (tj. nejkratsi a nejdelsi slovo):
+
+minimum = min(clean_words2)
+maximum = max(clean_words2)
+
+# 6.4 - Zjistim cetnosti jednotlivych delek,
+# a ulozim do slovniku (klic = delka slova,
+# hodnota = cetnost vyskytu klice):
+
+frequency = {key: clean_words2.count(key) for key in range(minimum, maximum + 1)}
+# Tuto "comprehension" jsem "vygooglil" na netu,
+# chapu, jak funguje, ale sam bych musel rozepsat do mnohem vic kroku.
+
+"""print(frequency)""" # kontrola
+
+# 6.5 - Vytisknu do "grafu" pozadovaneho formatu:
+
+for i in range(minimum, maximum + 1):
+    print(str(i).rjust(4),
+          "|",
+          str("*" * frequency.get(i)).ljust(12),
+          "|".rjust(2),
+          frequency.get(i)
+          )
+    i += 1
+
+# ZAVERECNE POZNAMY:
+# Nektere drobnosti jsem si do kodu pridal
+# (napr. rozliseni mezi sg. a pl., iniciala u jmena apod.)
+# Vim, ze by slo pouzit vic "comprehensions" u for cyklu,
+# ale chtel jsem taky co nejpresneji rozepsat,
+# jak jsem o tom uvazoval.
+# Dekuji za shovivavost!
